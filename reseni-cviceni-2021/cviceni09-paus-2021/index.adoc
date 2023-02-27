@@ -1,0 +1,35 @@
+# Cvičení 09
+
+## Záznam cvičení 09
+
+++++
+<video width="100%"  controls>
+  <source src="https://kmlinux.fjfi.cvut.cz/~pauspetr/video/bipa2-2021-cv09.mp4" type="video/mp4">
+</video>
+++++
+https://kmlinux.fjfi.cvut.cz/~pauspetr/video/bipa2-2021-cv09.mp4
+
+# Původní zadání
+
+Šablony v C++.
+
+## Level 1
+
+* Vytvořte třídu `Array`, která bude realizovat staticky alokované pole pro volitelný datový typ.
+* Velikost pole a typ předáváme v době kompilace pomocí šablony.
+* Tato třída musí umět přístup k libovolnému prvku na základě jeho indexu pomocí přetíženého `operátoru []` (jak pro potřeby upravení prvku, tak i pro zjištění hodnoty v případě konstatního objektu). 
+* Implementujte metodu `print()`, která do `ostream` vypíše prvky `Array` oddělené mezerou (mezera navíc na konci nevadí).
+* implementujte `operátor <<` pro výpis do streamu (využijte `print()`).
+
+## Level 2
+
+* Vytvořte šablonovou fci `max()`, která má jako parametr třídu `Array` a vrací index, na kterém je nejvyšší hodnota z pole.
+
+## Level 3
+
+* V souboru `Point.hpp` doimplementujte třídu `Point` tak, abychom ji mohli využít jako typ v `Array`. Pro hledání maxima berte v úvahu vzdálenost od počátku souřadnic `[0, 0]`.
+
+## Level 4
+
+* Zkuste vytvořit specializaci třídy `Array`, aby pro typ `char` nevypisovala mezery mezi prvky.
+* Minimalizujte duplikování kódu.

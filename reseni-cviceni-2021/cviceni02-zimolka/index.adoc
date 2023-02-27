@@ -1,0 +1,15 @@
+# Cvičení 02, řešení s video záznamem
+
+Video s postupným programováním a vysvětlujícím komentářem.
+
+### Obsah
+* Komplexní číslo
+* Simple Regex
+
+++++
+<video width="100%"  controls>
+  <source src="https://kmlinux.fjfi.cvut.cz/~pauspetr/video/bipa2-2021-cv02.mp4" type="video/mp4">
+</video>
+++++
+
+https://kmlinux.fjfi.cvut.cz/~pauspetr/video/bipa2-2021-cv02.mp4
