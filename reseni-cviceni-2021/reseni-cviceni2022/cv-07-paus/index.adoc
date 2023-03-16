@@ -1,0 +1,7 @@
+# Řešení cvičení 07
+
+++++
+<video width="100%"  controls>
+  <source src="https://kmlinux.fjfi.cvut.cz/~pauspetr/video/bipa2-07.mp4" type="video/mp4">
+</video>
+++++
