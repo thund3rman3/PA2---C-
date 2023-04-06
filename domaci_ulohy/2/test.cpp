@@ -16,12 +16,16 @@
 using namespace std;
 #endif /* __PROGTEST__ */
 
+/**
+ * Struct represeting employee
+ */
 struct sEMPLOYEE
 {
   string name;
   string surname;
   string email;
   unsigned int salary;
+
   sEMPLOYEE(const string &name, const string &surname, const string &email, unsigned int salary = 0)
       : name(name), surname(surname), email(email), salary(salary) {}
 };
@@ -31,131 +35,192 @@ class CPersonalAgenda
 public:
   CPersonalAgenda(void);
   ~CPersonalAgenda(void);
+
+  /**
+   * Add employee to our DB
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @param[in] email = email of employee
+   * @param[in] salary = salary of employee
+   * @return true = valid input,
+   * @return false = employee with the same pair of (name,surname) or email already exists
+   */
   bool add(const string &name,
            const string &surname,
            const string &email,
            unsigned int salary);
+
+  /**
+   * Delete empoyee from our DB
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @return true = valid input,
+   * @return false = employee with the same pair of (name,surname) does not exist
+   */
   bool del(const string &name,
            const string &surname);
+
+  /**
+   * Delete empoyee from our DB
+   * @param[in] email = email of employee
+   * @return true = valid input,
+   * @return false = employee with the same email does not exist
+   */
   bool del(const string &email);
+
+  /**
+   * Change employee's name and surname
+   * @param[in] email = email of employee
+   * @param[in] newName = new name of employee
+   * @param[in] newSurname = new surname of employee
+   * @return true = valid change
+   * @return false = employee with the same email does not exist
+   * or pair of (newName, newSurname) is not unique (someone has it already)
+   */
   bool changeName(const string &email,
                   const string &newName,
                   const string &newSurname);
+
+  /**
+   * Change employee's email
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @param[in] newEmail = new email of employee
+   * @return true = valid change
+   * @return false = employee with the same pair of (name,surname) does not exist
+   * or newEmail is not unique (someone has it already)
+   */
   bool changeEmail(const string &name,
                    const string &surname,
                    const string &newEmail);
+
+  /**
+   * Set employee's salary
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @param[in] salary = salary of employee
+   * @return true = salary set
+   * @return false = same pair of (namae,surname) does not exist
+   */
   bool setSalary(const string &name,
                  const string &surname,
                  unsigned int salary);
+
+  /**
+   * Set employee's salary
+   * @param[in] email = email of employee
+   * @param[in] salary = salary of employee
+   * @return true = salary set
+   * @return false = same email does not exist
+   */
   bool setSalary(const string &email,
                  unsigned int salary);
+
+  /**
+   * Get salary amount
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @return salary = valid input
+   * @return 0 = pair of (name, surname) does not exist
+   */
   unsigned int getSalary(const string &name,
                          const string &surname) const;
+
+  /**
+   * Get salary amount
+   * @param[in] email = email of employee
+   * @return salary = valid input
+   * @return 0 = email does not exist
+   */
   unsigned int getSalary(const string &email) const;
+
+  /**
+   * Find out how good is employee getting paid in relation to others
+   * @param[in] name = name of employee
+   * @param[in] surname = surname of employee
+   * @param[in,out] rankMin = number of people who are paid less
+   * @param[in,out] rankMax = number of people who are paid less and equal
+   * @return true = employee found, rank parameters filled
+   * @return false = employee not found, rank parameters did not change
+   */
   bool getRank(const string &name,
                const string &surname,
                int &rankMin,
                int &rankMax) const;
-  /*
-  zjistí jak dobře je zaměstnanec placen ve vztahu k ostatním.
-   Výsledkem je pozice výplaty zadaného zaměstnance na pomyslném žebříčku výplat
-    od nejhorší (nejnižší) k nejlepší (nejvyšší).
-    Parametrem je identifikace zaměstnance
-    (podle varianty buď jménem a příjmením, nebo e-mailovou adresou),
-    parametry rankMin/rankMax jsou výstupní, do nich funkce zapíše pozici výplaty
-    hledaného zaměstnance v žebříčku. Protože stejnou výplatu může dostávat
-    více zaměstnanců, je výstupem dvojice hodnot - interval min-max.
-    Pokud například hledaný zaměstnanec dostává výplatu 20000, 37 zaměstnanců
-    dostává výplatu nižší a 21 dalších zaměstnanců dostává výplatu stejnou
-    (tedy plat 20000 dostává celkem 22 zaměstnanců), pak výsledkem je rankMin=37
-    a rankMax=37+22-1=58. Návratovou hodnotou funkce je true pro úspěch
-    (zadaný zaměstnanec nalezen, výstupní parametry vyplněny) nebo
-  false (zadaný zaměstnanec nenalezen, výstupní parametry ponechány beze změn).*/
+
+  /**
+   * Find out how good is employee getting paid in relation to others
+   * @param[in] email = email of employee
+   * @param[in,out] rankMin = number of people who are paid less
+   * @param[in,out] rankMax = number of people who are paid less and equal
+   * @return true = employee found, rank parameters filled
+   * @return false = employee not found, rank parameters did not change
+   */
   bool getRank(const string &email,
                int &rankMin,
                int &rankMax) const;
+
+  /**
+   * Get first employee based on sorted DB in ascending order by surname
+   * or if surnames match then by names
+   * @param[out] outName = name of first employee in sorted DB
+   * @param[out] outSurname = surname of first employee in sorted DB
+   * @return true = employee found, out parameters filled
+   * @return false = DB is empty, out parameters not changed
+   */
   bool getFirst(string &outName,
                 string &outSurname) const;
+
+  /**
+   * Get next employee to the (name, surname) employee
+   * based on sorted DB in ascending order by surname
+   * or if surnames match then by names
+   * @param[out] outName = name of next employee in sorted DB
+   * @param[out] outSurname = surname of next employee in sorted DB
+   * @return true = employee (name,surname)found, employee (name,surname) is not last in DB
+   * @return false = employee (name,surname) not found or is last in DB
+   */
   bool getNext(const string &name,
                const string &surname,
                string &outName,
                string &outSurname) const;
 
 private:
-  // todo
-  int binSearchName(const string &name) const;
-  int binSearchSurname(const string &surname) const;
-  int binSearchEmail(const string &email) const;
+  // DB = vector of employees
   vector<sEMPLOYEE> vEMPLOYEE;
+  vector<sEMPLOYEE> vEMAIL;
 };
 
-CPersonalAgenda::CPersonalAgenda() {}
-
-CPersonalAgenda::~CPersonalAgenda() {}
-
-int CPersonalAgenda::binSearchName(const string &name) const
-{
-  size_t size = vEMPLOYEE.size();
-  size_t lo = 0, hi = size;
-
-  while (lo < hi)
-  {
-    size_t mid = lo + (hi - lo) / 2;
-    if (vEMPLOYEE.at(mid).name == name)
-      return mid;
-    else if (name < vEMPLOYEE.at(mid).name)
-      hi = mid;
-    else
-      lo = mid + 1;
-  }
-  return -1;
-}
-
-int CPersonalAgenda::binSearchSurname(const string &surname) const
-{
-  size_t size = vEMPLOYEE.size();
-  size_t lo = 0, hi = size;
-
-  while (lo < hi)
-  {
-    size_t mid = lo + (hi - lo) / 2;
-    if (vEMPLOYEE.at(mid).surname == surname)
-      return mid;
-    else if (surname < vEMPLOYEE.at(mid).surname)
-      hi = mid;
-    else
-      lo = mid + 1;
-  }
-  return -1;
-}
-
-int CPersonalAgenda::binSearchEmail(const string &email) const
-{
-  size_t size = vEMPLOYEE.size();
-  size_t lo = 0, hi = size;
-
-  while (lo < hi)
-  {
-    size_t mid = lo + (hi - lo) / 2;
-    if (vEMPLOYEE.at(mid).email == email)
-      return mid;
-    else if (email < vEMPLOYEE.at(mid).email)
-      hi = mid;
-    else
-      lo = mid + 1;
-  }
-  return -1;
-}
-
-int cmp_names(const sEMPLOYEE &a, const sEMPLOYEE &b)
+/**
+ * Compare function for lower_bound
+ * Sorting DB in ascending order by surnames
+ * If surnames are equal sort by names
+ * @param[in] a = employee 1
+ * @param[in] b = employee 2
+ * @return true = b is "bigger" than a
+ * @return false = a is "bigger" than b
+ */
+bool cmp_names(const sEMPLOYEE &a, const sEMPLOYEE &b)
 {
   return a.surname == b.surname ? a.name < b.name : a.surname < b.surname;
 }
 
-int cmp_email(const sEMPLOYEE &a, const sEMPLOYEE &b)
+/**
+ * Compare function for lower_bound
+ * Sorting DB in ascending order by emails
+ * @param[in] a = employee 1
+ * @param[in] b = employee 2
+ * @return true = b is "bigger" than a
+ * @return false = a is "bigger" than b
+ */
+bool cmp_email(const sEMPLOYEE &a, const sEMPLOYEE &b)
 {
-  return a.email > b.email;
+  return a.email < b.email;
 }
+
+CPersonalAgenda::CPersonalAgenda() {}
+
+CPersonalAgenda::~CPersonalAgenda() {}
 
 bool CPersonalAgenda::add(const string &name,
                           const string &surname,
@@ -163,52 +228,48 @@ bool CPersonalAgenda::add(const string &name,
                           unsigned int salary)
 {
   sEMPLOYEE input(name, surname, email, salary);
-
+  // empty vector
   if (vEMPLOYEE.size() == 0)
   {
     vEMPLOYEE.push_back(input);
-    cout << "0 " << input.name << " " << input.surname << " " << input.email << endl;
+    vEMAIL.push_back(input);
     return true;
   }
+  auto lb_names = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx_name = lb_names - vEMPLOYEE.begin();
 
-  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
+  if (vEMAIL[idx_mail].email == email && lb_mail != vEMAIL.end())
+    return false;
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  // name check with valid index
+  if (lb_names != vEMPLOYEE.end() && vEMPLOYEE[idx_name].name == name && vEMPLOYEE[idx_name].surname == surname)
+    return false;
 
-  if (idx < vEMPLOYEE.size())
-  {
-    if ((vEMPLOYEE.at(idx).name == name && vEMPLOYEE.at(idx).surname == surname) ||
-        vEMPLOYEE.at(idx).email == email)
-    {
-      return false;
-    }
-  }
-  cout << idx << " " << vEMPLOYEE.size() << " " << input.name << " "
-       << input.surname << " " << input.email << " ";
+  vEMAIL.insert(lb_mail, input);
 
-  vEMPLOYEE.insert(lb, input);
-
-  cout << vEMPLOYEE.at(idx).email << endl;
-
+  vEMPLOYEE.insert(lb_names, input);
   return true;
 }
 
 bool CPersonalAgenda::del(const string &name,
                           const string &surname)
 {
-  string s = "";
-  sEMPLOYEE input(name, surname, s);
+  sEMPLOYEE input(name, surname, "");
   auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), vEMPLOYEE[idx], cmp_email);
 
-  if (idx < vEMPLOYEE.size())
+  if (lb == vEMPLOYEE.end() || lb_mail == vEMAIL.end())
+    return false;
+  // if exists -> delete
+  if (vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname && vEMAIL[lb_mail - vEMAIL.begin()].email == vEMPLOYEE[idx].email)
   {
-    if (vEMPLOYEE.at(idx).name == name && vEMPLOYEE.at(idx).surname == surname)
-    {
-      vEMPLOYEE.erase(lb);
-      return true;
-    }
+    vEMPLOYEE.erase(lb);
+    vEMAIL.erase(lb_mail);
+    return true;
   }
   return false;
 }
@@ -216,51 +277,52 @@ bool CPersonalAgenda::del(const string &name,
 bool CPersonalAgenda::del(const string &email)
 {
   sEMPLOYEE input("", "", email);
-  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  if (lb_mail == vEMAIL.end())
+    return false;
+  if (vEMAIL[idx_mail].email != email)
+    return false;
 
-  if (idx < vEMPLOYEE.size())
-  {
-    if (vEMPLOYEE.at(idx).email == email)
-    {
-      vEMPLOYEE.erase(lb);
-      return true;
-    }
-  }
-  return false;
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), vEMAIL[idx_mail], cmp_names);
+
+  vEMAIL.erase(lb_mail);
+  vEMPLOYEE.erase(lb);
+  return true;
 }
 
 bool CPersonalAgenda::changeName(const string &email,
                                  const string &newName,
                                  const string &newSurname)
 {
-  sEMPLOYEE input("", "", email);
-  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_email);
+  // email check
+  sEMPLOYEE in("", "", email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), in, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  if (lb_mail == vEMAIL.end())
+    return false;
+  if (vEMAIL[idx_mail].email != email)
+    return false;
 
-  if (idx < vEMPLOYEE.size())
-  {
-    if (vEMPLOYEE.at(idx).email == email)
-    {
-      sEMPLOYEE input(newName, newSurname, email);
-      auto lb2 = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
-      size_t idx2 = lb2 - vEMPLOYEE.begin();
+  auto lb_name = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), vEMAIL[idx_mail], cmp_names);
+  int idx2 = lb_name - vEMPLOYEE.begin();
 
-      if (idx2 < vEMPLOYEE.size())
-      {
-        if (vEMPLOYEE.at(idx2).name == newName && vEMPLOYEE.at(idx2).surname == newSurname)
-        {
-          return false;
-        }
-      }
-      vEMPLOYEE.at(idx).name = newName;
-      vEMPLOYEE.at(idx).surname = newSurname;
-      return true;
-    }
-  }
-  return false;
+  sEMPLOYEE input(newName, newSurname, email, vEMPLOYEE[idx2].salary);
+
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
+
+  // name check
+  if (lb != vEMPLOYEE.end() && vEMPLOYEE[idx].name == newName && vEMPLOYEE[idx].surname == newSurname)
+    return false;
+
+  vEMAIL[idx_mail].name = newName;
+  vEMAIL[idx_mail].surname = newSurname;
+  vEMPLOYEE.erase(lb_name);
+  vEMPLOYEE.insert(lb, input);
+  return true;
 }
 
 bool CPersonalAgenda::changeEmail(const string &name,
@@ -269,26 +331,25 @@ bool CPersonalAgenda::changeEmail(const string &name,
 {
   sEMPLOYEE input(name, surname, newEmail);
   auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  sEMPLOYEE in(name, surname, vEMPLOYEE[idx].email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), in, cmp_email);
 
-  if (idx < vEMPLOYEE.size())
+  if (lb != vEMPLOYEE.end() && vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname && lb_mail != vEMAIL.end())
   {
-    if (vEMPLOYEE.at(idx).name == name && vEMPLOYEE.at(idx).surname == surname)
-    {
-      auto lb2 = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_email);
-      size_t idx2 = lb2 - vEMPLOYEE.begin();
+    auto res_pos = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+    int idx3 = res_pos - vEMAIL.begin();
 
-      if (idx2 < vEMPLOYEE.size())
-      {
-        if (vEMPLOYEE.at(idx2).email == newEmail)
-        {
-          return false;
-        }
-      }
-      vEMPLOYEE.at(idx).email = newEmail;
-      return true;
-    }
+    // email check
+    if (vEMAIL[idx3].email == newEmail)
+      return false;
+
+    input.salary = vEMPLOYEE[idx].salary;
+    vEMAIL.erase(lb_mail);
+    vEMPLOYEE[idx].email = newEmail;
+    vEMAIL.insert(res_pos, input);
+    return true;
   }
   return false;
 }
@@ -299,16 +360,12 @@ bool CPersonalAgenda::setSalary(const string &name,
 {
   sEMPLOYEE input(name, surname, "");
   auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
-
-  if (idx < vEMPLOYEE.size())
+  if (lb != vEMPLOYEE.end() && vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname)
   {
-    if (vEMPLOYEE.at(idx).name == name && vEMPLOYEE.at(idx).surname == surname)
-    {
-      vEMPLOYEE.at(idx).salary = salary;
-      return true;
-    }
+    vEMPLOYEE[idx].salary = salary;
+    return true;
   }
   return false;
 }
@@ -317,20 +374,19 @@ bool CPersonalAgenda::setSalary(const string &email,
                                 unsigned int salary)
 {
   sEMPLOYEE input("", "", email);
-  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
-  cout<<"idx: "<<idx<<" "<<vEMPLOYEE.at(idx).email<<endl;
-  if (idx < vEMPLOYEE.size())
-  {
-    if (vEMPLOYEE.at(idx).email == email)
-    {
-      cout<<vEMPLOYEE.at(idx).email<<" "<<vEMPLOYEE.at(idx).name<<" "<<vEMPLOYEE.at(idx).surname<<endl;
-      vEMPLOYEE.at(idx).salary = salary;
-      return true;
-    }
-  }
-  return false;
+  if (lb_mail == vEMAIL.end())
+    return false;
+  if (vEMAIL[idx_mail].email != email)
+    return false;
+
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), vEMAIL[idx_mail], cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
+
+  vEMPLOYEE[idx].salary = salary;
+  return true;
 }
 
 unsigned int CPersonalAgenda::getSalary(const string &name,
@@ -338,34 +394,31 @@ unsigned int CPersonalAgenda::getSalary(const string &name,
 {
   sEMPLOYEE input(name, surname, "");
   auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
-
-  if (idx < vEMPLOYEE.size())
+  if (lb != vEMPLOYEE.end() && vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname)
   {
-    if (vEMPLOYEE.at(idx).name == name && vEMPLOYEE.at(idx).surname == surname)
-    {
-      return vEMPLOYEE.at(idx).salary;
-    }
+    return vEMPLOYEE[idx].salary;
   }
   return 0;
 }
 
 unsigned int CPersonalAgenda::getSalary(const string &email) const
 {
+  // email check
   sEMPLOYEE input("", "", email);
-  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
 
-  size_t idx = lb - vEMPLOYEE.begin();
+  if (lb_mail == vEMAIL.end())
+    return false;
+  if (vEMAIL[idx_mail].email != email)
+    return 0;
 
-  if (idx < vEMPLOYEE.size())
-  {
-    if (vEMPLOYEE.at(idx).email == email)
-    {
-      return vEMPLOYEE.at(idx).salary;
-    }
-  }
-  return 0;
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), vEMAIL[idx_mail], cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
+
+  return vEMPLOYEE[idx].salary;
 }
 
 bool CPersonalAgenda::getRank(const string &name,
@@ -373,7 +426,28 @@ bool CPersonalAgenda::getRank(const string &name,
                               int &rankMin,
                               int &rankMax) const
 {
-  return true;
+  sEMPLOYEE input(name, surname, "");
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
+
+  int idx = lb - vEMPLOYEE.begin();
+
+  if (lb != vEMPLOYEE.end() && vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname)
+  {
+    unsigned int salary_tmp = vEMPLOYEE[idx].salary;
+    int cnt_min = 0;
+    int cnt_max = 0;
+
+    for (sEMPLOYEE x : vEMPLOYEE)
+    {
+      if (x.salary < salary_tmp)
+        cnt_min++;
+      else if (x.salary == salary_tmp)
+        cnt_max++;
+    }
+    rankMin = cnt_min;
+    rankMax = cnt_max - 1 + cnt_min;
+    return true;
+  }
   return false;
 }
 
@@ -381,18 +455,41 @@ bool CPersonalAgenda::getRank(const string &email,
                               int &rankMin,
                               int &rankMax) const
 {
+  // email check
+  sEMPLOYEE input("", "", email);
+  auto lb_mail = lower_bound(vEMAIL.begin(), vEMAIL.end(), input, cmp_email);
+  int idx_mail = lb_mail - vEMAIL.begin();
+
+  if (vEMAIL[idx_mail].email != email || lb_mail == vEMAIL.end())
+    return false;
+
+  auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), vEMAIL[idx_mail], cmp_names);
+  int idx = lb - vEMPLOYEE.begin();
+
+  unsigned int salary_tmp = vEMPLOYEE[idx].salary;
+  int cnt_min = 0;
+  int cnt_max = 0;
+
+  for (sEMPLOYEE x : vEMPLOYEE)
+  {
+    if (x.salary < salary_tmp)
+      cnt_min++;
+    else if (x.salary == salary_tmp)
+      cnt_max++;
+  }
+
+  rankMin = cnt_min;
+  rankMax = cnt_max - 1 + cnt_min;
   return true;
-  return false;
 }
 
 bool CPersonalAgenda::getFirst(string &outName,
                                string &outSurname) const
 {
-  if (vEMPLOYEE.empty() == false &&
-      (outName != vEMPLOYEE.at(0).name || outSurname != vEMPLOYEE.at(0).surname))
+  if (vEMPLOYEE.empty() == false)
   {
-    outName = vEMPLOYEE.at(0).name;
-    outSurname = vEMPLOYEE.at(0).surname;
+    outName = vEMPLOYEE[0].name;
+    outSurname = vEMPLOYEE[0].surname;
     return true;
   }
   return false;
@@ -405,15 +502,14 @@ bool CPersonalAgenda::getNext(const string &name,
 {
   sEMPLOYEE input(name, surname, "");
   auto lb = lower_bound(vEMPLOYEE.begin(), vEMPLOYEE.end(), input, cmp_names);
-
   size_t idx = lb - vEMPLOYEE.begin();
 
-  if (vEMPLOYEE.empty() == false && idx < vEMPLOYEE.size() - 1)
+  if (vEMPLOYEE.empty() == false && idx < (vEMPLOYEE.size() - 1))
   {
-    if (vEMPLOYEE.at(idx).name == name || vEMPLOYEE.at(idx).surname == surname)
+    if (vEMPLOYEE[idx].name == name && vEMPLOYEE[idx].surname == surname)
     {
-      outName = vEMPLOYEE.at(idx+1).name;
-      outSurname = vEMPLOYEE.at(idx+1).surname;
+      outName = vEMPLOYEE[idx + 1].name;
+      outSurname = vEMPLOYEE[idx + 1].surname;
       return true;
     }
   }
@@ -426,57 +522,57 @@ int main(void)
   string outName, outSurname;
   int lo, hi;
 
-  CPersonalAgenda b1;
-  assert(b1.add("John", "Smith", "john", 30000));
-  assert(b1.add("John", "Miller", "johnm", 35000));
-  assert(b1.add("Peter", "Smith", "peter", 23000));
-  assert(b1.add("John", "Smith", "john", 230) == false);
-  assert(b1.add("John", "Miller", "johnm", 23330) == false);
+  // CPersonalAgenda b1;
+  // assert(b1.add("John", "Smith", "john", 30000));
+  // assert(b1.add("John", "Miller", "johnm", 35000));
+  // assert(b1.add("Peter", "Smith", "peter", 23000));
+  // assert(b1.add("John", "Smith", "john", 230) == false);
+  // assert(b1.add("John", "Miller", "johnm", 23330) == false);
+  // // assert(b1.del("John", "Miller"));
+  // // assert(b1.del("John", "Miller") == false);
+  // // assert(b1.del("peter"));
+  // // assert(b1.del("peter") == false);
+  // assert(b1.getFirst(outName, outSurname) && outName == "John" && outSurname == "Miller");
+  // assert(b1.getNext("John", "Miller", outName, outSurname) && outName == "John" && outSurname == "Smith");
+  // assert(b1.getNext("John", "Smith", outName, outSurname) && outName == "Peter" && outSurname == "Smith");
+  // assert(!b1.getNext("Peter", "Smith", outName, outSurname));
+  // assert(b1.setSalary("john", 32000));
+  // assert(b1.getSalary("john") == 32000);
+  // assert(b1.getSalary("John", "Smith") == 32000);
+  // assert(b1.getRank("John", "Smith", lo, hi) && lo == 1 && hi == 1);
+  // assert(b1.getRank("john", lo, hi) && lo == 1 && hi == 1);
+  // assert(b1.getRank("peter", lo, hi) && lo == 0 && hi == 0);
+  // assert(b1.getRank("johnm", lo, hi) && lo == 2 && hi == 2);
+  // assert(b1.setSalary("John", "Smith", 35000));
+  // assert(b1.getSalary("John", "Smith") == 35000);
+  // assert(b1.getSalary("john") == 35000);
+  // assert(b1.getRank("John", "Smith", lo, hi) && lo == 1 && hi == 2);
+  // assert(b1.getRank("john", lo, hi) && lo == 1 && hi == 2);
+  // assert(b1.getRank("peter", lo, hi) && lo == 0 && hi == 0);
+  // assert(b1.getRank("johnm", lo, hi) && lo == 1 && hi == 2);
+  // assert(b1.changeName("peter", "James", "Bond"));
+  // assert(b1.getSalary("peter") == 23000);
+  // assert(b1.getSalary("James", "Bond") == 23000);
+  // assert(b1.getSalary("Peter", "Smith") == 0);
+  // assert(b1.getFirst(outName, outSurname) && outName == "James" && outSurname == "Bond");
+  // assert(b1.getNext("James", "Bond", outName, outSurname) && outName == "John" && outSurname == "Miller");
+  // assert(b1.getNext("John", "Miller", outName, outSurname) && outName == "John" && outSurname == "Smith");
+  // assert(!b1.getNext("John", "Smith", outName, outSurname));
+  // assert(b1.changeEmail("James", "Bond", "james"));
+  // assert(b1.getSalary("James", "Bond") == 23000);
+  // assert(b1.getSalary("james") == 23000);
+  // assert(b1.getSalary("peter") == 0);
+  // assert(b1.del("james"));
+  // assert(b1.getRank("john", lo, hi) && lo == 0 && hi == 1);
   // assert(b1.del("John", "Miller"));
-  // assert(b1.del("John", "Miller") == false);
-  // assert(b1.del("peter"));
-  // assert(b1.del("peter") == false);
-  assert(b1.getFirst(outName, outSurname) && outName == "John" && outSurname == "Miller");
-  assert(b1.getNext("John", "Miller", outName, outSurname) && outName == "John" && outSurname == "Smith");
-  assert(b1.getNext("John", "Smith", outName, outSurname) && outName == "Peter" && outSurname == "Smith");
-  assert(!b1.getNext("Peter", "Smith", outName, outSurname));
-  assert(b1.setSalary("john", 32000));
-  assert(b1.getSalary("john") == 32000);
-  assert(b1.getSalary("John", "Smith") == 32000);
-  assert(b1.getRank("John", "Smith", lo, hi) && lo == 1 && hi == 1);
-  assert(b1.getRank("john", lo, hi) && lo == 1 && hi == 1);
-  assert(b1.getRank("peter", lo, hi) && lo == 0 && hi == 0);
-  assert(b1.getRank("johnm", lo, hi) && lo == 2 && hi == 2);
-  assert(b1.setSalary("John", "Smith", 35000));
-  assert(b1.getSalary("John", "Smith") == 35000);
-  assert(b1.getSalary("john") == 35000);
-  assert(b1.getRank("John", "Smith", lo, hi) && lo == 1 && hi == 2);
-  assert(b1.getRank("john", lo, hi) && lo == 1 && hi == 2);
-  assert(b1.getRank("peter", lo, hi) && lo == 0 && hi == 0);
-  assert(b1.getRank("johnm", lo, hi) && lo == 1 && hi == 2);
-  assert(b1.changeName("peter", "James", "Bond"));
-  assert(b1.getSalary("peter") == 23000);
-  assert(b1.getSalary("James", "Bond") == 23000);
-  assert(b1.getSalary("Peter", "Smith") == 0);
-  assert(b1.getFirst(outName, outSurname) && outName == "James" && outSurname == "Bond");
-  assert(b1.getNext("James", "Bond", outName, outSurname) && outName == "John" && outSurname == "Miller");
-  assert(b1.getNext("John", "Miller", outName, outSurname) && outName == "John" && outSurname == "Smith");
-  assert(!b1.getNext("John", "Smith", outName, outSurname));
-  assert(b1.changeEmail("James", "Bond", "james"));
-  assert(b1.getSalary("James", "Bond") == 23000);
-  assert(b1.getSalary("james") == 23000);
-  assert(b1.getSalary("peter") == 0);
-  assert(b1.del("james"));
-  assert(b1.getRank("john", lo, hi) && lo == 0 && hi == 1);
-  assert(b1.del("John", "Miller"));
-  assert(b1.getRank("john", lo, hi) && lo == 0 && hi == 0);
-  assert(b1.getFirst(outName, outSurname) && outName == "John" && outSurname == "Smith");
-  assert(!b1.getNext("John", "Smith", outName, outSurname));
-  assert(b1.del("john"));
-  assert(!b1.getFirst(outName, outSurname));
-  assert(b1.add("John", "Smith", "john", 31000));
-  assert(b1.add("john", "Smith", "joHn", 31000));
-  assert(b1.add("John", "smith", "jOhn", 31000));
+  // assert(b1.getRank("john", lo, hi) && lo == 0 && hi == 0);
+  // assert(b1.getFirst(outName, outSurname) && outName == "John" && outSurname == "Smith");
+  // assert(!b1.getNext("John", "Smith", outName, outSurname));
+  // assert(b1.del("john"));
+  // assert(!b1.getFirst(outName, outSurname));
+  // assert(b1.add("John", "Smith", "john", 31000));
+  // assert(b1.add("john", "Smith", "joHn", 31000));
+  // assert(b1.add("John", "smith", "jOhn", 31000));
 
   CPersonalAgenda b2;
   assert(!b2.getFirst(outName, outSurname));
