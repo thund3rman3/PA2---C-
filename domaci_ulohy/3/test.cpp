@@ -399,7 +399,7 @@ string toString(const CRangeList &x)
 int main(void)
 {
   CRangeList a, b;
-
+  a+={12,17}+CRange(79,79);
   assert(sizeof(CRange) <= 2 * sizeof(long long));
   a = CRange(5, 10);
   a += CRange(25, 100);
