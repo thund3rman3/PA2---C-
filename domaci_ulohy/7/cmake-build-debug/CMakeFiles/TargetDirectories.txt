@@ -1,0 +1,3 @@
+/home/joe/Plocha/PA2---C-/domaci_ulohy/cmake-build-debug/CMakeFiles/domaci_ulohy.dir
+/home/joe/Plocha/PA2---C-/domaci_ulohy/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/joe/Plocha/PA2---C-/domaci_ulohy/cmake-build-debug/CMakeFiles/rebuild_cache.dir
